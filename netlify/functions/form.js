@@ -1,5 +1,4 @@
 exports.handler = async (event) => {
-  // Solo permitir POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -7,27 +6,23 @@ exports.handler = async (event) => {
     };
   }
 
-  let data;
-  try {
-    data = JSON.parse(event.body);
-  } catch (error) {
-    return {
-      statusCode: 400,
-      body: "Invalid JSON",
-    };
-  }
+  // Shopify envía form-data, no JSON
+  const params = new URLSearchParams(event.body);
 
-  const { name, email, message } = data;
+  const name = params.get("name");
+  const email = params.get("email");
+  const message = params.get("message");
 
-  // 👉 ENVÍO DE EMAIL (Netlify built-in)
-  // Se envía al correo del owner del sitio
-  console.log("Nuevo mensaje de contacto:");
+  console.log("📩 Nuevo mensaje de contacto");
   console.log("Nombre:", name);
   console.log("Email:", email);
   console.log("Mensaje:", message);
 
   return {
     statusCode: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       success: true,
       redirect: "https://lasfloresdelareina.cl/pages/contacto-gracias",
