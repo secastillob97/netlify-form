@@ -18,14 +18,12 @@ exports.handler = async (event) => {
   console.log("Email:", email);
   console.log("Mensaje:", message);
 
-  return {
-    statusCode: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      success: true,
-      redirect: "https://lasfloresdelareina.cl/pages/contacto-gracias",
+return {
+  statusCode: 302,
+  headers: {
+    Location: "https://lasfloresdelareina.cl/pages/contacto-gracias",
+  },
+};
     }),
   };
 };
